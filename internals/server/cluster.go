@@ -107,23 +107,23 @@ func (s *Server) ClusterHandler(w http.ResponseWriter, r *http.Request) {
 	e.Encode(cluster)
 }
 
-func (s *Server) ClusterListHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := getCloudSessions(r)
-	if err != nil {
-		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
-		return
-	}
+// func (s *Server) ClusterListHandler(w http.ResponseWriter, r *http.Request) {
+// 	session, err := getCloudSessions(r)
+// 	if err != nil {
+// 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
+// 		return
+// 	}
 
-	clusters, err := session.GetClusters("")
-	if err != nil {
-		handleError(w, http.StatusUnauthorized, "could not get clusters", err.Error())
-		return
-	}
+// 	clusters, err := session.GetClusters("")
+// 	if err != nil {
+// 		handleError(w, http.StatusUnauthorized, "could not get clusters", err.Error())
+// 		return
+// 	}
 
-	w.WriteHeader(http.StatusOK)
-	e := json.NewEncoder(w)
-	e.Encode(clusters)
-}
+// 	w.WriteHeader(http.StatusOK)
+// 	e := json.NewEncoder(w)
+// 	e.Encode(clusters)
+// }
 
 func (s *Server) ClusterWorkerListHandler(w http.ResponseWriter, r *http.Request) {
 	session, err := getCloudSessions(r)
@@ -177,3 +177,60 @@ func (s *Server) VlanEndpointHandler(w http.ResponseWriter, r *http.Request) {
 	e := json.NewEncoder(w)
 	e.Encode(vlans)
 }
+
+
+func (s *Server) ClusterListHandler(w http.ResponseWriter, r *http.Request) {
+	session, err := getCloudSessions(r)
+	if err != nil {
+		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
+		return
+	}
+
+	applications, err := session.GetApplications("")
+	if err != nil {
+		handleError(w, http.StatusUnauthorized, "could not get applications", err.Error())
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	e := json.NewEncoder(w)
+	e.Encode(applications)
+}
+
+
+// func (s *Server) AppListHandler(w http.ResponseWriter, r *http.Request) {
+// 	session, err := getCloudSessions(r)
+// 	if err != nil {
+// 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
+// 		return
+// 	}
+
+// 	applications, err := session.GetApplications("")
+// 	if err != nil {
+// 		handleError(w, http.StatusUnauthorized, "could not get applications", err.Error())
+// 		return
+// 	}
+
+// 	w.WriteHeader(http.StatusOK)
+// 	e := json.NewEncoder(w)
+// 	e.Encode(applications)
+// }
+
+
+// func (s *Server) AppServiceBindingsHandler(w http.ResponseWriter, r *http.Request) {
+// 	session, err := getCloudSessions(r)
+// 	if err != nil {
+// 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
+// 		return
+// 	}
+
+// 	applications, err := session.GetApplications("")
+// 	if err != nil {
+// 		handleError(w, http.StatusUnauthorized, "could not get applications", err.Error())
+// 		return
+// 	}
+
+// 	w.WriteHeader(http.StatusOK)
+// 	e := json.NewEncoder(w)
+// 	e.Encode(applications)
+// }

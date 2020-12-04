@@ -123,8 +123,6 @@ const WorkerDetails = ({ workers }) => (
 );
 
 const Clusters = ({ query, accountID }) => {
-  console.log("query");
-  console.log(query);
   const [
     clusters,
     { deleteClusters, deleteTag, setTag, reload, getBilling, getWorkers },
@@ -250,7 +248,6 @@ const Clusters = ({ query, accountID }) => {
   };
 
   const render = useCallback(
-    
     ({
       rows,
       headers,
@@ -262,36 +259,118 @@ const Clusters = ({ query, accountID }) => {
       onInputChange,
       getExpandHeaderProps,
     }) => (
-      // <TableContainer title="Clusters">
-      //Indira - 
-      <TableContainer title="Applications">       
+      <TableContainer title="Clusters">
+        <TableToolbar>
+          {/* pass in `onInputChange` change here to make filtering work */}
+          <TableBatchActions {...getBatchActionProps()}>
+            <TableBatchAction
+              tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
+              renderIcon={Delete}
+              onClick={() =>
+                deleteClusters(selectedRows.map((r) => clusters.data[r.id]))
+              }
+            >
+              Delete
+            </TableBatchAction>
+            <div className="tag-input">
+              <TextInput
+                id="tag-input"
+                hideLabel
+                value={tagText}
+                onChange={(e) => setTagText(e.target.value.trim())}
+                labelText="tag"
+                placeholder="Tag"
+              />
+            </div>
+            <Button
+              renderIcon={TagGroup}
+              iconDescription="Group Tag"
+              hasIconOnly
+              kind="primary"
+              size="default"
+              type="button"
+              tooltipPosition="right"
+              onClick={() =>
+                onSetTagClicked(
+                  selectedRows.map((r) => clusters.data[r.id]),
+                  tagText
+                )
+              }
+            />
+          </TableBatchActions>
+          <TableToolbarContent>
+            <TableToolbarSearch
+              tabIndex={getBatchActionProps().shouldShowBatchActions ? -1 : 0}
+              onChange={onInputChange}
+            />
+            <Button
+              renderIcon={VM}
+              iconDescription="Get Workers for Clusters"
+              hasIconOnly
+              kind="secondary"
+              size="field"
+              type="button"
+              tooltipPosition="right"
+              onClick={() => onGetWorkersClicked(clusters.data)}
+            />
+            <Button
+              renderIcon={Money}
+              iconDescription="Get Billing for Clusters"
+              hasIconOnly
+              kind="tertiary"
+              size="field"
+              type="button"
+              tooltipPosition="right"
+              onClick={() => onBillingClicked(clusters.data)}
+            />
+            <Button onClick={reload} renderIcon={Reset}>
+              Reload
+            </Button>
+          </TableToolbarContent>
+          {/* <TableToolbarContent>
+            <Button onClick={() => buttonClicked(selectedRows)}  kind="primary">
+              Add new
+            </Button>
+          </TableToolbarContent> */}
+        </TableToolbar>
         <Table>
+          <TableHead>
+            <TableRow>
+              <TableExpandHeader enableExpando {...getExpandHeaderProps()} />
+              <TableSelectAll {...getSelectionProps()} />
+              {headers.map((header, i) => (
+                <TableHeader key={i} {...getHeaderProps({ header })}>
+                  {header.header}
+                </TableHeader>
+              ))}
+            </TableRow>
+          </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <React.Fragment key={row.guid}>
+              <React.Fragment key={row.id}>
                 <TableExpandRow {...getRowProps({ row })}>
-                  {/* <TableSelectRow {...getSelectionProps({ row })} /> */}
+                  <TableSelectRow {...getSelectionProps({ row })} />
                   {row.cells.map((cell) => (
                     <TableCell key={cell.id}>
                       <CustomCell
                         cell={cell}
-                       // crn={clusters.data[row.id].crn}
-                        id={row.guid}
-                        // ingressHost={clusters.data[row.id].ingressHostName}
-                        // ingressSecret={clusters.data[row.id].ingressSecretName}
+                        crn={clusters.data[row.id].crn}
+                        id={row.id}
+                        ingressHost={clusters.data[row.id].ingressHostName}
+                        ingressSecret={clusters.data[row.id].ingressSecretName}
                       />
                     </TableCell>
                   ))}
                 </TableExpandRow>
-                {/* <TableExpandedRow colSpan={headers.length + 2}>
+                <TableExpandedRow colSpan={headers.length + 2}>
                   <CustomExpandedRow
-                    // ownerEmail={clusters.data[row.id].ownerEmail}
-                    // workersLoading={workersLoading}
+                    ownerEmail={clusters.data[row.id].ownerEmail}
+                    workersLoading={workersLoading}
                     name={clusters.data[row.id].name}
                     dateCreated={clusters.data[row.id].createdDate}
-                    // workers={clusters.data[row.id].workers}
+                    workers={clusters.data[row.id].workers}
                   />
-                </TableExpandedRow> */}
+                </TableExpandedRow>
               </React.Fragment>
             ))}
           </TableBody>
@@ -312,7 +391,7 @@ const Clusters = ({ query, accountID }) => {
     return (
       <>
         <div className="bx--data-table-header">
-          <h4>Applications</h4>
+          <h4>Clusters</h4>
         </div>
         <DataTableSkeleton
           columnCount={headers.length}
@@ -334,7 +413,8 @@ const Clusters = ({ query, accountID }) => {
   //   );
   // }
   return (
-    <DataTable rows={Object.keys(clusters.data).map((guid) => clusters.data[guid])}
+    <DataTable
+      rows={Object.keys(clusters.data).map((id) => clusters.data[id])}
       headers={headers}
       render={render}
       isSortable

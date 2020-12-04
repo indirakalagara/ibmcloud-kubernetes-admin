@@ -8,33 +8,13 @@ const headers = [
     header: 'State',
   },
   {
-    key: 'ingress',
-    header: 'Ingress',
-  },
-  {
-    key: 'masterKubeVersion',
-    header: 'Master Version',
-  },
-  {
-    key: 'dataCenter',
-    header: 'Data Center',
-  },
-  {
-    key: 'workerCount',
-    header: 'Worker Count',
-  },
-  {
     key: 'createdDate',
-    header: 'Days Since'
+    header: 'Created Date'
   },
   {
-    key: 'tags',
-    header: 'Tags',
-  },
-  {
-    key: 'cost',
-    header: 'Cost',
-  },
+    key: 'updatedDate',
+    header: 'Updated Date'
+  }
 ];
 
 export default headers;

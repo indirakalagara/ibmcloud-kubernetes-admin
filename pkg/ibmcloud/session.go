@@ -456,3 +456,17 @@ func (s *Session) GetAccountAdminEmails(accountID string) ([]string, error) {
 	}
 	return GetAccountAdminEmails(accountID)
 }
+
+/* Manthan */
+// GetClusters returns array of Clusters for current session
+func (s *Session) GetApplications(location string) ([]Application, error) {
+
+	applications, err := getApplications(s.Token.AccessToken, location)
+	return applications, err;
+}
+
+func (s *Session) GetAppServiceBindings(app_guid string) ([]AppService, error) {
+
+	appServices, err := getAppServiceBindings(s.Token.AccessToken, app_guid)
+	return appServices, err;
+}

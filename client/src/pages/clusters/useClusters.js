@@ -31,6 +31,10 @@ function removeTagFromArray(arr, tag) {
   return arr;
 }
 
+const arrayToMapApp = (arr) =>
+  arr.reduce((acc, cur) => ({ ...acc, [cur.guid]: cur }), {});
+
+
 function clusterReducer(state, action) {
   switch (action.type) {
     case 'FETCH_INIT':
@@ -228,48 +232,51 @@ const useClusters = (accountID, query) => {
     dispatch({ type: 'FETCH_INIT' });
     try {
       let _clusters = await grab('/api/v1/clusters', { signal });
+      console.log("_clusters : ", _clusters);
       if(query.filter) {
         _clusters = _clusters.filter(cluster => cluster.name.includes(query.filter));
       }
       if (!cancelled) {
-        const clusters = arrayToMap(_clusters);
+        console.log("not cancelled : ");
+        const clusters = arrayToMapApp(_clusters);
+        console.log("clusters : ", clusters);
         dispatch({ type: 'FETCH_SUCCESS', payload: clusters });
 
-        const tagsPromises = Object.keys(clusters).map(async (id) => {
-          try {
-            const _tags = await grab('/api/v1/clusters/gettag', {
-              signal,
-              method: 'POST',
-              body: JSON.stringify({
-                crn: clusters[id].crn,
-              }),
-            });
+        // const tagsPromises = Object.keys(clusters).map(async (id) => {
+        //   try {
+        //     const _tags = await grab('/api/v1/clusters/gettag', {
+        //       signal,
+        //       method: 'POST',
+        //       body: JSON.stringify({
+        //         crn: clusters[id].crn,
+        //       }),
+        //     });
 
-            const tags = _tags.items;
+        //     const tags = _tags.items;
 
-            if (!WAIT_FOR_ALL && !cancelled) {
-              dispatch({
-                type: 'UPDATE_TAG',
-                id,
-                tags,
-              });
-            }
-            return { id, tags };
-          } catch {
-            return undefined;
-          }
-        });
+        //     if (!WAIT_FOR_ALL && !cancelled) {
+        //       dispatch({
+        //         type: 'UPDATE_TAG',
+        //         id,
+        //         tags,
+        //       });
+        //     }
+        //     return { id, tags };
+        //   } catch {
+        //     return undefined;
+        //   }
+        // });
 
-        if (WAIT_FOR_ALL) {
-          Promise.all(tagsPromises).then((tags) => {
-            if (!cancelled) {
-              dispatch({
-                type: 'UPDATE_ALL_TAGS',
-                tags,
-              });
-            }
-          });
-        }
+        // if (WAIT_FOR_ALL) {
+        //   Promise.all(tagsPromises).then((tags) => {
+        //     if (!cancelled) {
+        //       dispatch({
+        //         type: 'UPDATE_ALL_TAGS',
+        //         tags,
+        //       });
+        //     }
+        //   });
+        // }
 
         // const costPromises = Object.keys(clusters).map(async (id) => {
         //   try {

@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+	
 	ibmcloud.SetupCloudant()
 
 	server := server.NewServer()
@@ -73,6 +74,11 @@ func main() {
 	api.HandleFunc("/notification/email/add", server.AddAdminEmails).Methods(http.MethodPut)
 	api.HandleFunc("/notification/email/remove", server.RemoveAdminEmails).Methods(http.MethodPut)
 	api.HandleFunc("/notification/email", server.DeleteAdminEmails).Methods(http.MethodDelete)
+
+//Manthan
+	api.HandleFunc("/applications", server.AppListHandler).Methods(http.MethodGet)
+	api.HandleFunc("/appserviceBindings", server.AppServiceBindingsHandler).Methods(http.MethodGet)
+//Mantha -end
 
 	spa := spaHandler{staticPath: "client/build", indexPath: "index.html"}
 	r.PathPrefix("/").Handler(spa)

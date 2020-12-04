@@ -31,6 +31,7 @@ const (
 // domain
 const api = "cloud.ibm.com"
 
+
 // endpoints
 const (
 	identityEndpoint     = protocol + subdomainIAM + api + "/identity/.well-known/openid-configuration"
@@ -52,6 +53,11 @@ const (
 	datacentersEndpoint = containersEndpoint + "/datacenters"
 )
 
+/*Manthan */
+const (
+	cfAppEndpoint     =  "/v3/apps/"
+)
+
 // grant types
 const (
 	passcodeGrantType     = "urn:ibm:params:oauth:grant-type:passcode"
@@ -60,6 +66,8 @@ const (
 )
 
 const basicAuth = "Basic Yng6Yng="
+
+const cfToken=""
 
 //// useful for loagging
 // bodyBytes, err := ioutil.ReadAll(resp.Body)
@@ -172,6 +180,7 @@ func getAccounts(endpoint *string, token string) (*Accounts, error) {
 	}
 	var result Accounts
 	err := fetch(*endpoint, header, nil, &result)
+	log.Println("In getAccounts : result ",result)
 	if err != nil {
 		return nil, err
 	}
@@ -542,4 +551,122 @@ func updateTags(endpoint, token string, updateTag UpdateTag) (*TagResult, error)
 	}
 
 	return &result, nil
+}
+
+/* Manthan */
+
+func getApplications(token, location string) ([]Application, error) {
+	defer timeTaken(time.Now(), "GetApplication :")
+	fmt.Println("In getApplications : Start ");
+	//var returnResult []Application
+	var result Applications
+	// var app_resources []Application
+	token = cfToken;
+	header := map[string]string{
+		"Authorization": "Bearer " + token,
+	}
+
+	query := map[string]string{}
+	if len(location) > 0 {
+		query["location"] = location
+	}
+	appEndPoint := "https://api.us-south.cf.cloud.ibm.com/v3/apps/";
+	// err := fetch(appEndPoint, header, query, &(result.app_resources))
+	err := fetch(appEndPoint, header, query, &result)
+	if err != nil {
+		log.Println("Error: In getApplications ", err);
+		return nil, err
+	}
+	log.Println("In getApplications App Resources Results ", result);
+	//log.Println("In getApplications App Resources Results ", result.Resources);
+
+	//log.Println("In getApplications App Resources ", len(result.app_resources));
+	//app_resources= result.app_resources;
+
+	// wg := &sync.WaitGroup{}
+
+	// for _, cluster := range result {
+	// 	time.Sleep(10 * time.Millisecond)
+	// 	wg.Add(1)
+	// 	go func(cluster *Cluster) {
+	// 		tags, err := getTags(token, cluster.Crn)
+	// 		if err != nil {
+	// 			log.Println("error for tag: ", cluster.Name)
+	// 			log.Println("error : ", err)
+	// 		} else {
+	// 			cluster.Tags = make([]string, len(tags.Items))
+	// 			for i, val := range tags.Items {
+	// 				cluster.Tags[i] = val.Name
+	// 			}
+	// 		}
+	// 		wg.Done()
+	// 	}(cluster)
+	// 	wg.Add(1)
+	// 	go func(cluster *Cluster) {
+	// 		workers, err := getClusterWorkers(token, cluster.ID)
+	// 		if err != nil {
+	// 			log.Println("error for worker: ", cluster.Name)
+	// 			log.Println("error : ", err)
+	// 		} else {
+	// 			cluster.Workers = workers
+	// 			cost, err := getBillingData(token, accountID, cluster.Crn, workers)
+	// 			if err != nil {
+	// 				log.Println("error for cost: ", cluster.Name)
+	// 			}
+	// 			cluster.Cost = cost
+	// 		}
+	// 		wg.Done()
+	// 	}(cluster)
+	// }
+
+	// wg.Wait()
+	return result.Resources, nil
+}
+
+func getAppServiceBindings(token, app_guid string) ([]AppService, error) {
+	defer timeTaken(time.Now(), "getAppServiceBindings :")
+	fmt.Println("In getAppServiceBindings : Start ");
+	//var returnResult []Application
+	var result AppServices
+	// var app_resources []Application
+	token = cfToken
+
+	header := map[string]string{
+		"Authorization": "Bearer " + token,
+	}
+
+	query := map[string]string{}
+	log.Println("In getAppServiceBindings  app_guid  ", app_guid);
+	if len(app_guid) > 0 {
+		//log.Println("In getAppServiceBindings  app_guid  ", app_guid);
+		query["app_guids"] = app_guid
+	} else{
+		query["app_guids"] = "cb90db45-a04f-405f-8180-3e916fab9a91"
+	}
+
+	appEndPoint := "https://api.us-south.cf.cloud.ibm.com/v3/service_bindings";
+	// err := fetch(appEndPoint, header, query, &(result.app_resources))
+	err := fetch(appEndPoint, header, query, &result)
+	if err != nil {
+		log.Println("Error: In getAppServiceBindings ", err);
+		return nil, err
+	}
+	
+	// log.Println("In getAppServiceBindings  Results ", result);
+	// log.Println("In getAppServiceBindings  Results Resources ", result.Resources);
+	
+	var appServiceslist []AppService;
+	
+	for _,tmpService := range result.Resources {
+		tmpService.AppServiceName = tmpService.Data.Name
+		tmpService.AppServiceInstanceName = tmpService.Data.InstanceName		
+		appServiceslist = append(appServiceslist, tmpService)
+		log.Println("In getAppServiceBindings  For  ", tmpService);
+	
+	}
+
+	log.Println("In getAppServiceBindings  appServiceslist  ", appServiceslist);
+	
+	//return result.Resources, nil
+	return appServiceslist, nil
 }

@@ -568,3 +568,62 @@ type ScheduleCloudant struct {
 	DestroyAt                    int    `json:"destroy_at"`
 	Status                       string `json:"status"`
 }
+
+// type AppResources struct {
+// 	app_resources	[]Application `json:"resources"`
+	
+
+// }
+
+type Application struct {
+	
+	Name                      string        `json:"name"`
+	ID						string `json:"guid"`
+	State                    string        `json:"state"`
+	CreatedDate 		time.Time `json:"created_at"`	
+	UpdatedDate 		time.Time `json:"updated_at"`	
+	Link 					interface{}  `json:"links"`	
+	// MultiAzCapable                bool          `json:"multiAzCapable"`
+	// Vlans                         []string      `json:"vlans"`
+	// WorkerVlans                   []string      `json:"worker_vlans"`
+	// WorkerZones                   []string      `json:"workerZones"`
+	// ID                           	string `json:"_id"`
+}
+
+type Applications struct {
+	NextURL      *string   `json:"next_url"`
+	TotalResults int       `json:"total_results"`
+	Resources    []Application `json:"resources"`
+}
+
+
+type AppService struct {
+	
+	
+	ID						string `json:"guid"`
+	Type                    string        `json:"type"`
+	CreatedDate 			time.Time `json:"created_at"`	
+	UpdatedDate 			time.Time `json:"updated_at"`	
+	Link 					interface{}  `json:"links"`	
+	Data AppServiceData	`json:"data"`	
+	AppServiceName	string  `json:"name"`	
+	AppServiceInstanceName string	`json:"instance_name"`	
+
+	// MultiAzCapable                bool          `json:"multiAzCapable"`
+	// Vlans                         []string      `json:"vlans"`
+	// WorkerVlans                   []string      `json:"worker_vlans"`
+	// WorkerZones                   []string      `json:"workerZones"`
+	// ID                           	string `json:"_id"`
+}
+
+type AppServices struct {
+	NextURL      *string   `json:"next_url"`
+	TotalResults int       `json:"total_results"`
+	Resources    []AppService `json:"resources"`
+}
+
+type AppServiceData struct {
+	// Data					interface{}  `json:"data"`	
+	Name string `json:"name"`
+	InstanceName string `json:"instance_name"`
+}

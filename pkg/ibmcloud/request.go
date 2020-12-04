@@ -18,6 +18,7 @@ func handleRequest(request *http.Request, header map[string]string, query map[st
 		request.Header.Add(key, value)
 	}
 
+	log.Println("In request.go handleRequest : ", request.URL);
 	q := request.URL.Query()
 	for key, value := range query {
 		q.Add(key, value)
@@ -31,11 +32,14 @@ func handleRequest(request *http.Request, header map[string]string, query map[st
 	if err != nil {
 		return err
 	}
-
+	//b, err := ioutil.ReadAll(resp.Body);
+	// log.Println("In request.go handleRequest - resp 1 : ", json.NewDecoder(resp.Body));
+    // log.Println("In request.go handleRequest - resp 2: ", json.NewDecoder(resp.Body).Decode(&res));
 	defer resp.Body.Close()
 
 	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
 		b, err := ioutil.ReadAll(resp.Body)
+		log.Println("In request.go handleRequest - b : ", b);
 		if err != nil {
 			log.Println(err)
 		}
@@ -111,7 +115,8 @@ func fetch(endpoint string, header, query map[string]string, res interface{}) er
 	if err != nil {
 		return err
 	}
-
+	log.Println("In request.go - fecth - Request : ", request);
+	
 	return handleRequest(request, header, query, res)
 }
 
