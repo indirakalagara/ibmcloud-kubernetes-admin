@@ -36,6 +36,12 @@ func (s *Server) AppServiceBindingsHandler(w http.ResponseWriter, r *http.Reques
 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
 		return
 	}
+	// funcVersion := r.FormValue("version")
+	// if err != nil {
+	// 	handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
+	// 	return
+	// }
+
 	applications, err := session.GetAppServiceBindings(app_guid)
 	if err != nil {
 		handleError(w, http.StatusUnauthorized, "could not get applications services", err.Error())

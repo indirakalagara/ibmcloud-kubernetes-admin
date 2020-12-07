@@ -12,6 +12,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	// "os"
+	// "io/ioutil"
 )
 
 // protocol
@@ -67,7 +69,7 @@ const (
 
 const basicAuth = "Basic Yng6Yng="
 
-const cfToken=""
+const cfToken="eyJhbGciOiJIUzI1NiIsImprdSI6Imh0dHBzOi8vdWFhLnVzLXNvdXRoLmNmLmNsb3VkLmlibS5jb20vdG9rZW5fa2V5cyIsImtpZCI6ImtleS0yIiwidHlwIjoiSldUIn0.eyJqdGkiOiJhZGVkMDNmMjNlYjg0OGVlYTRkYTg5MzQyN2FiM2Y4ZSIsInN1YiI6IjljYzg4OTVkLTAxYWItNGI3Yy1iMzRiLWYxZjBhM2ZiNTAwYyIsInNjb3BlIjpbIm9wZW5pZCIsIm5ldHdvcmsud3JpdGUiLCJ1YWEudXNlciIsImNsb3VkX2NvbnRyb2xsZXIucmVhZCIsInBhc3N3b3JkLndyaXRlIiwiY2xvdWRfY29udHJvbGxlci53cml0ZSIsIm5ldHdvcmsuYWRtaW4iXSwiY2xpZW50X2lkIjoiY2YiLCJjaWQiOiJjZiIsImF6cCI6ImNmIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9pZCI6IjljYzg4OTVkLTAxYWItNGI3Yy1iMzRiLWYxZjBhM2ZiNTAwYyIsIm9yaWdpbiI6IklCTWlkIiwidXNlcl9uYW1lIjoiaW5kaXJhLmthbGFnYXJhQGluLmlibS5jb20iLCJlbWFpbCI6ImluZGlyYS5rYWxhZ2FyYUBpbi5pYm0uY29tIiwiYXV0aF90aW1lIjoxNjA3MzMwMDM2LCJpYXQiOjE2MDczMzAwMzYsImV4cCI6MTYwNzMzMzYzNiwiaXNzIjoiaHR0cHM6Ly91YWEubmcuYmx1ZW1peC5uZXQvb2F1dGgvdG9rZW4iLCJ6aWQiOiJ1YWEiLCJhdWQiOlsiY2xvdWRfY29udHJvbGxlciIsInBhc3N3b3JkIiwiY2YiLCJ1YWEiLCJvcGVuaWQiLCJuZXR3b3JrIl0sImlhbV9pZCI6IklCTWlkLTA2MDAwMEg1NEMifQ.RbiT496dkjbY4nwAA_14O9h7qA6RLw-e04il1Q5H6Sw"
 
 //// useful for loagging
 // bodyBytes, err := ioutil.ReadAll(resp.Body)
@@ -554,6 +556,10 @@ func updateTags(endpoint, token string, updateTag UpdateTag) (*TagResult, error)
 }
 
 /* Manthan */
+  
+func initApplicationData(customerJSON string )([]byte, error) {
+	return nil,nil
+}
 
 func getApplications(token, location string) ([]Application, error) {
 	defer timeTaken(time.Now(), "GetApplication :")
@@ -561,65 +567,54 @@ func getApplications(token, location string) ([]Application, error) {
 	//var returnResult []Application
 	var result Applications
 	// var app_resources []Application
-	token = cfToken;
-	header := map[string]string{
-		"Authorization": "Bearer " + token,
-	}
+	//app_result := {};
+	
+	appsData :=`{"resources":[{"guid":"cb90db45-a04f-405f-8180-3e916fab9a91","created_at":"2020-12-07T09:37:55Z","updated_at":"2020-08-16T15:44:16Z","name":"Manthan_VisualReg","state":"STARTED","lifecycle":{"type":"buildpack","data":{"buildpacks":[],"stack":"cflinuxfs3"}},"relationships":{"space":{"data":{"guid":"bd0c1abd-4d70-4e57-81c4-32af0fc43a00"}}},"metadata":{"labels":{},"annotations":{}}},
+	{"guid":"cb90db45-a04f-405f-8180-3e916fab9a92","created_at":"2020-12-07T09:37:55Z","updated_at":"2020-08-16T15:44:16Z","name":"app2","state":"STOPPED","lifecycle":{"type":"buildpack","data":{"buildpacks":[],"stack":"cflinuxfs3"}},"relationships":{"space":{"data":{"guid":"bd0c1abd-4d70-4e57-81c4-32af0fc43a00"}}},"metadata":{"labels":{},"annotations":{}}},
+	{"guid":"cb90db45-a04f-405f-8180-3e916fab9a93","created_at":"2020-12-07T09:37:55Z","updated_at":"2020-08-16T15:44:16Z","name":"app3","state":"STARTED","lifecycle":{"type":"buildpack","data":{"buildpacks":[],"stack":"cflinuxfs3"}},"relationships":{"space":{"data":{"guid":"bd0c1abd-4d70-4e57-81c4-32af0fc43a00"}}},"metadata":{"labels":{},"annotations":{}}},
+	{"guid":"cb90db45-a04f-405f-8180-3e916fab9a94","created_at":"2020-12-07T09:37:55Z","updated_at":"2020-08-16T15:44:16Z","name":"app4","state":"STOPPED","lifecycle":{"type":"buildpack","data":{"buildpacks":[],"stack":"cflinuxfs3"}},"relationships":{"space":{"data":{"guid":"bd0c1abd-4d70-4e57-81c4-32af0fc43a00"}}},"metadata":{"labels":{},"annotations":{}}}
+	]}`
 
-	query := map[string]string{}
-	if len(location) > 0 {
-		query["location"] = location
-	}
-	appEndPoint := "https://api.us-south.cf.cloud.ibm.com/v3/apps/";
-	// err := fetch(appEndPoint, header, query, &(result.app_resources))
-	err := fetch(appEndPoint, header, query, &result)
+	log.Println("In getApplications App Resources Results ", appsData);
+	err := json.Unmarshal([]byte(appsData), &result)
 	if err != nil {
-		log.Println("Error: In getApplications ", err);
-		return nil, err
+		fmt.Println("Failed to unmarshal  result ")
 	}
-	log.Println("In getApplications App Resources Results ", result);
-	//log.Println("In getApplications App Resources Results ", result.Resources);
 
-	//log.Println("In getApplications App Resources ", len(result.app_resources));
-	//app_resources= result.app_resources;
+	// data, err := ioutil.ReadFile("/Users/indirakalagara/Workspaces/EB_Project/ibmcloud-kubernetes-admin/samples/cf_app_1.json")
+	/*
+	data, err := ioutil.ReadFile("cf_app_1.json")
+    if err != nil {
+      fmt.Print(err)
+	} else {
+		fmt.Print(data)
+	}
+	
+	err = json.Unmarshal(data, &result)
+    if err != nil {
+        fmt.Println("error:", err)
+	}
+	*/
 
-	// wg := &sync.WaitGroup{}
-
-	// for _, cluster := range result {
-	// 	time.Sleep(10 * time.Millisecond)
-	// 	wg.Add(1)
-	// 	go func(cluster *Cluster) {
-	// 		tags, err := getTags(token, cluster.Crn)
-	// 		if err != nil {
-	// 			log.Println("error for tag: ", cluster.Name)
-	// 			log.Println("error : ", err)
-	// 		} else {
-	// 			cluster.Tags = make([]string, len(tags.Items))
-	// 			for i, val := range tags.Items {
-	// 				cluster.Tags[i] = val.Name
-	// 			}
-	// 		}
-	// 		wg.Done()
-	// 	}(cluster)
-	// 	wg.Add(1)
-	// 	go func(cluster *Cluster) {
-	// 		workers, err := getClusterWorkers(token, cluster.ID)
-	// 		if err != nil {
-	// 			log.Println("error for worker: ", cluster.Name)
-	// 			log.Println("error : ", err)
-	// 		} else {
-	// 			cluster.Workers = workers
-	// 			cost, err := getBillingData(token, accountID, cluster.Crn, workers)
-	// 			if err != nil {
-	// 				log.Println("error for cost: ", cluster.Name)
-	// 			}
-	// 			cluster.Cost = cost
-	// 		}
-	// 		wg.Done()
-	// 	}(cluster)
+	// token = cfToken;
+	// header := map[string]string{
+	// 	"Authorization": "Bearer " + token,
 	// }
 
-	// wg.Wait()
+	// query := map[string]string{}
+	// if len(location) > 0 {
+	// 	query["location"] = location
+	// }
+	// appEndPoint := "https://api.us-south.cf.cloud.ibm.com/v3/apps/";
+	// // err := fetch(appEndPoint, header, query, &(result.app_resources))
+	// err := fetch(appEndPoint, header, query, &result)
+	// if err != nil {
+	// 	log.Println("Error: In getApplications ", err);
+	// 	return nil, err
+	// }
+
+	log.Println("In getApplications App Resources Results ", result);
+	
 	return result.Resources, nil
 }
 
@@ -629,28 +624,33 @@ func getAppServiceBindings(token, app_guid string) ([]AppService, error) {
 	//var returnResult []Application
 	var result AppServices
 	// var app_resources []Application
-	token = cfToken
+	
+	appsData :=`{"resources":[{"guid":"2b762b65-020b-4afa-95a9-d4d88f20ffd3","type":"app","data":{"name":"manthan-visualreg1-visualrecogniti-1602496873610-5","instance_name":"manthan-visualreg1-visualrecogniti-1602496873610-5","binding_name":null,"credentials":{"redacted_message":"[PRIVATE DATA HIDDEN IN LISTS]"},"syslog_drain_url":null,"volume_mounts":[]},"created_at":"2020-10-12T10:14:02Z","updated_at":"2020-10-12T10:14:02Z","links":{"self":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v3\/service_bindings\/2b762b65-020b-4afa-95a9-d4d88f20ffd3"},"service_instance":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v2\/service_instances\/045a1ddb-89ba-4377-a0af-70b76257270d"},"app":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v3\/apps\/cb90db45-a04f-405f-8180-3e916fab9a91"}}},{"guid":"c6166b47-0f8e-4722-b079-1d5a11f9d9a7","type":"app","data":{"name":"Manthan-Db2-av","instance_name":"Manthan-Db2-av","binding_name":null,"credentials":{"redacted_message":"[PRIVATE DATA HIDDEN IN LISTS]"},"syslog_drain_url":null,"volume_mounts":[]},"created_at":"2020-10-20T08:43:21Z","updated_at":"2020-10-20T08:43:21Z","links":{"self":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v3\/service_bindings\/c6166b47-0f8e-4722-b079-1d5a11f9d9a7"},"service_instance":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v2\/service_instances\/e66ad0e9-7e4f-42eb-a78d-01c307169b14"},"app":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v3\/apps\/cb90db45-a04f-405f-8180-3e916fab9a91"}}}]}`
 
-	header := map[string]string{
-		"Authorization": "Bearer " + token,
-	}
-
-	query := map[string]string{}
-	log.Println("In getAppServiceBindings  app_guid  ", app_guid);
-	if len(app_guid) > 0 {
-		//log.Println("In getAppServiceBindings  app_guid  ", app_guid);
-		query["app_guids"] = app_guid
-	} else{
-		query["app_guids"] = "cb90db45-a04f-405f-8180-3e916fab9a91"
-	}
-
-	appEndPoint := "https://api.us-south.cf.cloud.ibm.com/v3/service_bindings";
-	// err := fetch(appEndPoint, header, query, &(result.app_resources))
-	err := fetch(appEndPoint, header, query, &result)
+	log.Println("In getAppServiceBindings App Resources Results ", appsData);
+	err := json.Unmarshal([]byte(appsData), &result)
 	if err != nil {
-		log.Println("Error: In getAppServiceBindings ", err);
-		return nil, err
+		fmt.Println("Failed to unmarshal  result ")
 	}
+
+	
+
+	// query := map[string]string{}
+	// log.Println("In getAppServiceBindings  app_guid  ", app_guid);
+	// if len(app_guid) > 0 {
+	// 	//log.Println("In getAppServiceBindings  app_guid  ", app_guid);
+	// 	query["app_guids"] = app_guid
+	// } else{
+	// 	query["app_guids"] = "cb90db45-a04f-405f-8180-3e916fab9a91"
+	// }
+
+	// appEndPoint := "https://api.us-south.cf.cloud.ibm.com/v3/service_bindings";
+	// // err := fetch(appEndPoint, header, query, &(result.app_resources))
+	// err := fetch(appEndPoint, header, query, &result)
+	// if err != nil {
+	// 	log.Println("Error: In getAppServiceBindings ", err);
+	// 	return nil, err
+	// }
 	
 	// log.Println("In getAppServiceBindings  Results ", result);
 	// log.Println("In getAppServiceBindings  Results Resources ", result.Resources);
@@ -670,3 +670,24 @@ func getAppServiceBindings(token, app_guid string) ([]AppService, error) {
 	//return result.Resources, nil
 	return appServiceslist, nil
 }
+
+// file, err := os.OpenFile("cf_apps_Manthan_servicesBindings.json", os.O_RDONLY, 0666)
+	// 	//checkError(err)
+	// 	b, err := ioutil.ReadAll(file)
+	
+	// if err != nil {
+	// 	fmt.Print(err)
+	// 	} else {
+	// 		fmt.Print(b)
+	// 	}
+		
+	// 	err = json.Unmarshal(b, &result)
+	// 	if err != nil {
+	// 		fmt.Println("error:", err)
+	// 	}
+	// 	log.Println("In getAppServiceBindings  b  ",  b);	
+	// token = cfToken
+
+	// header := map[string]string{
+	// 	"Authorization": "Bearer " + token,
+	// }
