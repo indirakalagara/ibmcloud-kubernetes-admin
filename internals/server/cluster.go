@@ -10,6 +10,7 @@ import (
 )
 
 func (s *Server) ClusterDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Add("Content-Type", "application/json")
 	session, err := getCloudSessions(r)
 	if err != nil {
@@ -37,6 +38,7 @@ func (s *Server) ClusterDeleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) ClusterCreateHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Add("Content-Type", "application/json")
 	session, err := getCloudSessions(r)
 	if err != nil {
@@ -67,6 +69,7 @@ func (s *Server) ClusterCreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) ClusterHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	if err != nil {
 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
@@ -126,6 +129,7 @@ func (s *Server) ClusterHandler(w http.ResponseWriter, r *http.Request) {
 // }
 
 func (s *Server) ClusterWorkerListHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	if err != nil {
 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
@@ -154,6 +158,7 @@ func (s *Server) ClusterWorkerListHandler(w http.ResponseWriter, r *http.Request
 }
 
 func (s *Server) VlanEndpointHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Add("Content-Type", "application/json")
 	session, err := getCloudSessions(r)
 	if err != nil {

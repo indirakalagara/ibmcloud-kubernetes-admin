@@ -20,11 +20,13 @@ const (
 )
 
 func (s *Server) NotFoundHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Add("Content-Type", "application/json")
 	handleError(w, http.StatusNotFound, "not found")
 }
 
 func setCookie(w http.ResponseWriter, session *ibmcloud.Session) {
+	enableCors(&w)
 	accessTokenCookie := http.Cookie{Name: accessToken, Value: session.Token.AccessToken, Path: cookiePath}
 	http.SetCookie(w, &accessTokenCookie)
 

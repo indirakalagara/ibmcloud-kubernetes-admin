@@ -7,6 +7,7 @@ import (
 )
 
 func (s *Server) SetAPITokenHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	if err != nil {
 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
@@ -49,6 +50,7 @@ func (s *Server) SetAPITokenHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) CheckAPITokenHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	if err != nil {
 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
@@ -79,6 +81,7 @@ func (s *Server) CheckAPITokenHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) UpdateAPITokenHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	if err != nil {
 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())

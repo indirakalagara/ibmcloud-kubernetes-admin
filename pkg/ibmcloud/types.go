@@ -583,6 +583,8 @@ type Application struct {
 	CreatedDate 		time.Time `json:"created_at"`	
 	UpdatedDate 		time.Time `json:"updated_at"`	
 	Link 					interface{}  `json:"links"`	
+	Image	string        `json:"img_link"`
+	Type	string        `json:"type"`
 	// MultiAzCapable                bool          `json:"multiAzCapable"`
 	// Vlans                         []string      `json:"vlans"`
 	// WorkerVlans                   []string      `json:"worker_vlans"`
@@ -608,6 +610,7 @@ type AppService struct {
 	Data AppServiceData	`json:"data"`	
 	AppServiceName	string  `json:"name"`	
 	AppServiceInstanceName string	`json:"instance_name"`	
+	Image	string        `json:"img_link"`
 
 	// MultiAzCapable                bool          `json:"multiAzCapable"`
 	// Vlans                         []string      `json:"vlans"`
@@ -626,4 +629,5 @@ type AppServiceData struct {
 	// Data					interface{}  `json:"data"`	
 	Name string `json:"name"`
 	InstanceName string `json:"instance_name"`
+	//Type string 
 }

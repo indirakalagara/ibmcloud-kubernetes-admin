@@ -10,6 +10,7 @@ import (
 
 func (s *Server) ResourceGroupHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	if err != nil {
 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
@@ -35,6 +36,7 @@ func (s *Server) ResourceGroupHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) AccountListHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	if err != nil {
 		log.Printf("could not get session %v\n", err)
@@ -51,4 +53,7 @@ func (s *Server) AccountListHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	e := json.NewEncoder(w)
 	e.Encode(accounts)
+}
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }

@@ -569,6 +569,7 @@ func getApplications(token, location string) ([]Application, error) {
 	// var app_resources []Application
 	//app_result := {};
 	
+	/** Hard coded portion 
 	appsData :=`{"resources":[{"guid":"cb90db45-a04f-405f-8180-3e916fab9a91","created_at":"2020-12-07T09:37:55Z","updated_at":"2020-08-16T15:44:16Z","name":"Manthan_VisualReg","state":"STARTED","lifecycle":{"type":"buildpack","data":{"buildpacks":[],"stack":"cflinuxfs3"}},"relationships":{"space":{"data":{"guid":"bd0c1abd-4d70-4e57-81c4-32af0fc43a00"}}},"metadata":{"labels":{},"annotations":{}}},
 	{"guid":"cb90db45-a04f-405f-8180-3e916fab9a92","created_at":"2020-12-07T09:37:55Z","updated_at":"2020-08-16T15:44:16Z","name":"app2","state":"STOPPED","lifecycle":{"type":"buildpack","data":{"buildpacks":[],"stack":"cflinuxfs3"}},"relationships":{"space":{"data":{"guid":"bd0c1abd-4d70-4e57-81c4-32af0fc43a00"}}},"metadata":{"labels":{},"annotations":{}}},
 	{"guid":"cb90db45-a04f-405f-8180-3e916fab9a93","created_at":"2020-12-07T09:37:55Z","updated_at":"2020-08-16T15:44:16Z","name":"app3","state":"STARTED","lifecycle":{"type":"buildpack","data":{"buildpacks":[],"stack":"cflinuxfs3"}},"relationships":{"space":{"data":{"guid":"bd0c1abd-4d70-4e57-81c4-32af0fc43a00"}}},"metadata":{"labels":{},"annotations":{}}},
@@ -580,7 +581,8 @@ func getApplications(token, location string) ([]Application, error) {
 	if err != nil {
 		fmt.Println("Failed to unmarshal  result ")
 	}
-
+	**/
+	
 	// data, err := ioutil.ReadFile("/Users/indirakalagara/Workspaces/EB_Project/ibmcloud-kubernetes-admin/samples/cf_app_1.json")
 	/*
 	data, err := ioutil.ReadFile("cf_app_1.json")
@@ -596,22 +598,23 @@ func getApplications(token, location string) ([]Application, error) {
 	}
 	*/
 
-	// token = cfToken;
-	// header := map[string]string{
-	// 	"Authorization": "Bearer " + token,
-	// }
+	token = cfToken;
+	header := map[string]string{
+		"Authorization": "Bearer " + token,
+	}
 
-	// query := map[string]string{}
-	// if len(location) > 0 {
-	// 	query["location"] = location
-	// }
-	// appEndPoint := "https://api.us-south.cf.cloud.ibm.com/v3/apps/";
-	// // err := fetch(appEndPoint, header, query, &(result.app_resources))
-	// err := fetch(appEndPoint, header, query, &result)
-	// if err != nil {
-	// 	log.Println("Error: In getApplications ", err);
-	// 	return nil, err
-	// }
+	query := map[string]string{}
+	if len(location) > 0 {
+		query["location"] = location
+	}
+	appEndPoint := "https://156dd4be-692f-48ec-afb3-3e0fb9464f0b.mock.pstmn.io/v1/applications"
+	//"https://api.us-south.cf.cloud.ibm.com/v3/apps/";
+	// err := fetch(appEndPoint, header, query, &(result.app_resources))
+	err := fetch(appEndPoint, header, query, &result)
+	if err != nil {
+		log.Println("Error: In getApplications ", err);
+		return nil, err
+	}
 
 	log.Println("In getApplications App Resources Results ", result);
 	
@@ -624,7 +627,7 @@ func getAppServiceBindings(token, app_guid string) ([]AppService, error) {
 	//var returnResult []Application
 	var result AppServices
 	// var app_resources []Application
-	
+	/*
 	appsData :=`{"resources":[{"guid":"2b762b65-020b-4afa-95a9-d4d88f20ffd3","type":"app","data":{"name":"manthan-visualreg1-visualrecogniti-1602496873610-5","instance_name":"manthan-visualreg1-visualrecogniti-1602496873610-5","binding_name":null,"credentials":{"redacted_message":"[PRIVATE DATA HIDDEN IN LISTS]"},"syslog_drain_url":null,"volume_mounts":[]},"created_at":"2020-10-12T10:14:02Z","updated_at":"2020-10-12T10:14:02Z","links":{"self":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v3\/service_bindings\/2b762b65-020b-4afa-95a9-d4d88f20ffd3"},"service_instance":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v2\/service_instances\/045a1ddb-89ba-4377-a0af-70b76257270d"},"app":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v3\/apps\/cb90db45-a04f-405f-8180-3e916fab9a91"}}},{"guid":"c6166b47-0f8e-4722-b079-1d5a11f9d9a7","type":"app","data":{"name":"Manthan-Db2-av","instance_name":"Manthan-Db2-av","binding_name":null,"credentials":{"redacted_message":"[PRIVATE DATA HIDDEN IN LISTS]"},"syslog_drain_url":null,"volume_mounts":[]},"created_at":"2020-10-20T08:43:21Z","updated_at":"2020-10-20T08:43:21Z","links":{"self":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v3\/service_bindings\/c6166b47-0f8e-4722-b079-1d5a11f9d9a7"},"service_instance":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v2\/service_instances\/e66ad0e9-7e4f-42eb-a78d-01c307169b14"},"app":{"href":"https:\/\/api.us-south.cf.cloud.ibm.com\/v3\/apps\/cb90db45-a04f-405f-8180-3e916fab9a91"}}}]}`
 
 	log.Println("In getAppServiceBindings App Resources Results ", appsData);
@@ -632,25 +635,30 @@ func getAppServiceBindings(token, app_guid string) ([]AppService, error) {
 	if err != nil {
 		fmt.Println("Failed to unmarshal  result ")
 	}
+   */
+   
+ //  token = cfToken;
+   header := map[string]string{
+	   "Authorization": "Bearer " + token,
+   }
 
-	
+	query := map[string]string{}
+	log.Println("In getAppServiceBindings  app_guid  ", app_guid);
+	if len(app_guid) > 0 {
+		//log.Println("In getAppServiceBindings  app_guid  ", app_guid);
+		query["app_guids"] = app_guid
+	} else{
+		query["app_guids"] = "cb90db45-a04f-405f-8180-3e916fab9a91"
+	}
 
-	// query := map[string]string{}
-	// log.Println("In getAppServiceBindings  app_guid  ", app_guid);
-	// if len(app_guid) > 0 {
-	// 	//log.Println("In getAppServiceBindings  app_guid  ", app_guid);
-	// 	query["app_guids"] = app_guid
-	// } else{
-	// 	query["app_guids"] = "cb90db45-a04f-405f-8180-3e916fab9a91"
-	// }
-
-	// appEndPoint := "https://api.us-south.cf.cloud.ibm.com/v3/service_bindings";
-	// // err := fetch(appEndPoint, header, query, &(result.app_resources))
-	// err := fetch(appEndPoint, header, query, &result)
-	// if err != nil {
-	// 	log.Println("Error: In getAppServiceBindings ", err);
-	// 	return nil, err
-	// }
+	appEndPoint := "https://156dd4be-692f-48ec-afb3-3e0fb9464f0b.mock.pstmn.io/v1/appserviceBindings";
+	//"https://api.us-south.cf.cloud.ibm.com/v3/service_bindings";
+	// err := fetch(appEndPoint, header, query, &(result.app_resources))
+	err := fetch(appEndPoint, header, query, &result)
+	if err != nil {
+		log.Println("Error: In getAppServiceBindings ", err);
+		return nil, err
+	}
 	
 	// log.Println("In getAppServiceBindings  Results ", result);
 	// log.Println("In getAppServiceBindings  Results Resources ", result.Resources);
@@ -659,7 +667,8 @@ func getAppServiceBindings(token, app_guid string) ([]AppService, error) {
 	
 	for _,tmpService := range result.Resources {
 		tmpService.AppServiceName = tmpService.Data.Name
-		tmpService.AppServiceInstanceName = tmpService.Data.InstanceName		
+		tmpService.AppServiceInstanceName = tmpService.Data.InstanceName	
+		// tmpService.Type ="service"
 		appServiceslist = append(appServiceslist, tmpService)
 		log.Println("In getAppServiceBindings  For  ", tmpService);
 	

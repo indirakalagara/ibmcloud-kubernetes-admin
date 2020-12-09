@@ -11,6 +11,7 @@ import (
 
 
 func (s *Server) AppListHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	
 	if err != nil {
@@ -30,6 +31,7 @@ func (s *Server) AppListHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) AppServiceBindingsHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	app_guid := r.FormValue("app_guid")
 	if err != nil {

@@ -10,6 +10,7 @@ import (
 )
 
 func (s *Server) AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Add("Content-Type", "application/json")
 
 	var body map[string]interface{}
@@ -36,6 +37,7 @@ func (s *Server) AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) AuthenticationWithAccountHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Add("Content-Type", "application/json")
 
 	session, err := getCloudSessions(r)
@@ -73,6 +75,7 @@ func (s *Server) AuthenticationWithAccountHandler(w http.ResponseWriter, r *http
 }
 
 func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Add("Content-Type", "application/json")
 
 	session, err := getCloudSessions(r)
@@ -91,6 +94,7 @@ func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) TokenEndpointHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Add("Content-Type", "application/json")
 	endpoints, err := ibmcloud.GetIdentityEndpoints()
 	if err != nil {
