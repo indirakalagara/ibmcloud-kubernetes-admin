@@ -124,6 +124,7 @@ func (s *Server) UpdateAPITokenHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) DeleteAPITokenHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	session, err := getCloudSessions(r)
 	if err != nil {
 		handleError(w, http.StatusUnauthorized, "could not get session", err.Error())
